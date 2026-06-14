@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 23rd Birthday Deepti Meena! ❤️</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;800&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #ff758c;
+            --secondary: #7000ff;
+            --accent: #ffd700;
+            --bg-dark: #0f0c29;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- Loader --- */
+        #loader {
+            position: fixed; inset: 0; background: #000; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 1s ease;
+        }
+
+        /* --- Animations --- */
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 117, 140, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(255, 117, 140, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 117, 140, 0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(8deg); }
+            75% { transform: rotate(-8deg); }
+        }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* --- UI Elements --- */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            width: 100%;
+            max-width: 850px;
+            text-align: center;
+        }
+
+        section {
+            min-height: 100vh;
+            padding: 100px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(to right, #ff758c, #ff7eb3, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-begin {
+            margin-top: 40px;
+            padding: 18px 45px;
+            font-size: 1.3rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+            transition: 0.3s;
+        }
+
+        /* --- Journey Timeline --- */
+        .timeline { position: relative; width: 100%; max-width: 900px; margin-top: 50px; }
+        .timeline::after { content: ''; position: absolute; width: 2px; background: var(--primary); top: 0; bottom: 0; left: 50%; }
+        .time-point { padding: 20px 40px; width: 50%; position: relative; }
+        .time-point:nth-child(even) { left: 50%; }
+        .time-point::after {
+            content: '✨'; position: absolute; right: -14px; top: 25px; 
+            background: #1a1a2e; border-radius: 50%; width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; z-index: 2;
+        }
+        .time-point:nth-child(even)::after { left: -14px; }
+
+        .time-card { text-align: left; padding: 2rem; }
+        .time-card h4 { color: var(--accent); margin-bottom: 12px; font-size: 1.4rem; font-family: 'Montserrat', sans-serif; }
+        .time-card p { font-size: 1rem; line-height: 1.7; color: #e0e0e0; }
+
+        /* --- Quiz & Final Surprise --- */
+        .quiz-option {
+            width: 100%; padding: 15px; margin: 10px 0;
+            background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border);
+            border-radius: 12px; color: white; cursor: pointer; transition: 0.3s; text-align: left;
+        }
+        .quiz-option:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.02); }
+        .quiz-option.correct { background: #2ecc71 !important; border-color: #2ecc71; }
+
+        #gift-box-container { display: none; cursor: pointer; }
+        .shaking-gift { font-size: 120px; animation: shake 0.6s infinite; display: inline-block; }
+
+        .cake-img { width: 220px; filter: drop-shadow(0 0 20px #ffd700); margin: 20px 0; }
+
+        @media (max-width: 768px) {
+            .timeline::after { left: 20px; }
+            .time-point { width: 100%; left: 0 !important; padding-left: 50px; }
+            .time-point::after { left: 6px !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div id="loader">
+        <div style="font-family: 'Dancing Script', cursive; font-size: 3rem; color: var(--primary);">Preparing the Surprise...</div>
+    </div>
+
+    <!-- BIRTHDAY SONG (Hidden) -->
+    <!-- Using a reliable high-quality instrumental birthday song URL -->
+    <audio id="birthdayMusic" loop preload="auto">
+        <source src="https://www.mboxdrive.com/Happy%20Birthday%20Instrumental.mp3" type="audio/mpeg">
+        <source src="https://actions.google.com/config/service/sounds/audio/celebration/birthday_horn_oneshot.ogg" type="audio/ogg">
+    </audio>
+
+    <!-- SECTION 1: HERO -->
+    <section id="hero">
+        <h1 class="hero-title">Happy 23rd Birthday <br>Deepti Meena ❤️</h1>
+        <div id="typewriter" style="font-size: 1.4rem; color: #ccc; min-height: 1.5em; text-align: center;"></div>
+        <a href="#journey" class="btn-begin">Begin the Journey</a>
+    </section>
+
+    <!-- SECTION 2: OUR JOURNEY -->
+    <section id="journey">
+        <h2 class="hero-title" style="font-size: 3rem;">Our Journey</h2>
+        <div class="timeline">
+            
+            <div class="time-point reveal">
+                <div class="glass-card time-card">
+                    <h4>🌟 The Beginning</h4>
+                    <p>At first, I didn't truly understand who you were. But when you came to my home for the first time, something changed. I saw how genuine and good-hearted you really are. It was then I started feeling a connection that made me want to be a part of your journey as a friend.</p>
+                </div>
+            </div>
+
+            <div class="time-point reveal">
+                <div class="glass-card time-card">
+                    <h4>🗣️ The Real Conversations</h4>
+                    <p>Whether it was for studies, advice, or even a small question, I genuinely enjoyed being there for you. Helping you never felt like a responsibility—it was something I did willingly because every conversation meant more to me than you probably realized.</p>
+                </div>
+            </div>
+
+            <div class="time-point reveal">
+                <div class="glass-card time-card">
+                    <h4>💙 Respect & Growth</h4>
+                    <p>Maybe this part of the journey didn't happen the way people imagine, but I completely respect that. I sincerely wish for you to achieve every dream you've worked for. You deserve a future that reflects your values and the incredible person you are becoming.</p>
+                </div>
+            </div>
+
+            <div class="time-point reveal">
+                <div class="glass-card time-card">
+                    <h4>🤝 Always a Friend</h4>
+                    <p>I noticed every little thing because I cared. No matter where life takes us, my door will never be closed. I am also truly sorry if I caused any disappointment regarding your birthday plans—I never intended to make your special day difficult.</p>
+                </div>
+            </div>
+
+            <div class="time-point reveal">
+                <div class="glass-card time-card">
+                    <h4>🎂 Celebrating You</h4>
+                    <p>Today is your day—promise yourself not to be sad. Look at how far you've come and be proud. Don't let anything take away your smile or make you feel less special than you are. Enjoy this day, celebrate yourself, and remember you deserve happiness.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION 3: THE DEEPTI QUIZ -->
+    <section id="quiz">
+        <h2 class="hero-title" style="font-size: 2.8rem;">🌸 The Deepti Quiz 🌸</h2>
+        <div class="glass-card reveal" id="quiz-container">
+            <!-- Quiz Questions -->
+            <div id="quiz-content">
+                <p id="question-text" style="font-size: 1.3rem; color: var(--accent); margin-bottom: 20px; font-weight: 600;"></p>
+                <div id="options-box"></div>
+                <p id="feedback" style="margin-top: 15px; font-style: italic; color: #ffd700; min-height: 1.5em;"></p>
+            </div>
+
+            <!-- The Shaking Gift (This triggers the music) -->
+            <div id="gift-box-container" onclick="revealSurprise()">
+                <h2 style="color: var(--accent); margin-bottom: 15px;">Perfect Score! You know yourself best! 🏆</h2>
+                <div class="shaking-gift">🎁</div>
+                <p style="margin-top: 10px;">You've unlocked your birthday surprise!<br><b>Click the gift to open it!</b></p>
+            </div>
+
+            <!-- THE FINAL SURPRISE: CAKE + JAY'S MESSAGE -->
+            <div id="final-surprise" style="display: none;">
+                <h1 style="font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: var(--primary); margin-bottom: 10px;">Happy Birthday!</h1>
+                <img src="https://cdn-icons-png.flaticon.com/512/3132/3132715.png" class="cake-img" alt="Birthday Cake">
+                
+                <div style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; margin-top: 20px; line-height: 1.8; text-align: center;">
+                    <p style="font-size: 1.2rem; color: #fff;">
+                        "Congratulations! You got every answer right. But honestly, there was only one thing you needed to remember today — you are special, appreciated, and deserve all the happiness in the world."
+                    </p>
+                    <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 25px 0;">
+                    
+                    <h3 style="font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--accent);">Heartfelt Wishes for You:</h3>
+                    <p style="color: #e0e0e0; margin-top: 10px; font-size: 1.1rem;">
+                        "Wishing you a very Happy 23rd Birthday, Deepti! You are an incredible person with a beautiful heart. May this year bring you endless peace, success, and the strength to achieve every single dream you have. Keep shining, keep smiling, and always believe in the magic of who you are."
+                    </p>
+                    
+                    <p style="margin-top: 30px; font-weight: bold; color: var(--primary); font-size: 1.2rem;">
+                        — Jay Khobragade<br>
+                        <span style="font-weight: 300; font-size: 0.9rem; opacity: 0.8; color: #ccc;">A friend who was with you for some time.</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // --- Typewriter Effect ---
+        function startTypewriter() {
+            const text = "A journey built on memories, growth, and friendship...";
+            let i = 0;
+            const target = document.getElementById('typewriter');
+            if(!target) return;
+            function type() {
+                if (i < text.length) {
+                    target.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, 50);
+                }
+            }
+            type();
+        }
+
+        // --- QUIZ DATA ---
+        const questions = [
+            { q: "What does Deepti enjoy doing the most?", o: ["A. Watching lectures", "B. Making Reels 🎥", "C. Assignments", "D. Sleeping"], a: 1, m: "Absolutely! Creating reels is your favorite thing! 🎥✨" },
+            { q: "What does Deepti enjoy exploring the most?", o: ["A. Nature & New Places 🌄", "B. The Ceiling", "C. Textbooks", "D. Traffic"], a: 0, m: "Correct! Nature and new destinations always bring a smile to your face. 🌿❤️" },
+            { q: "What is Deepti most protective about?", o: ["A. Her Notes 📖", "B. Her Skin 🌟", "C. Her Backpack 🎒", "D. Her Water Bottle 💧"], a: 1, m: "Spot on! That glow must be protected! 🌟✨" },
+            { q: "What does Deepti enjoy in the kitchen?", o: ["A. Avoiding it", "B. Ordering food", "C. Trying new recipes 👩‍🍳", "D. Burning things"], a: 2, m: "Chef Deepti unlocked! You love making delicious food. 🍳✨" },
+            { q: "Which quality describes Deepti the best?", o: ["A. Kind ❤️", "B. Creative 🎨", "C. Caring 🌸", "D. All of the Above"], a: 3, m: "Perfect answer! You are a mix of all these beautiful things. 💖" },
+            { q: "What does Deepti enjoy doing most when she visits a beautiful place?", o: ["A. Sleeping 😴", "B. Studying 📚", "C. Clicking Photos 📸", "D. Counting Trees 🌳"], a: 2, m: "Naturally! Memories are best captured in photos. 📸✨" },
+            { q: "What does Deepti do the most in her free time? 😄", o: ["A. Studying Hard 📚", "B. Working Out 💪", "C. Sleeping 😄", "D. Reading Newspapers 📰"], a: 2, m: "Haha! A well-deserved sleep is the best way to relax! 😴" },
+            { q: "A perfect day for Deepti would include...", o: ["A. Good Food 🍕", "B. Beautiful Places 🌿", "C. Loved Ones ❤️", "D. All of the Above"], a: 3, m: "Exactly! Happiness is found in all those moments. 🌸✨" },
+            { q: "Who is the most important person today?", o: ["A. Birthday Queen 👑", "B. Deepti 👑", "C. Deepti Meena 👑", "D. All of the Above"], a: 3, m: "Bingo! Today is all about YOU! ❤️🌸🎉✨" }
+        ];
+
+        let currentIdx = 0;
+
+        function loadQuestion() {
+            const data = questions[currentIdx];
+            document.getElementById('question-text').innerText = `Question ${currentIdx + 1}: ${data.q}`;
+            const box = document.getElementById('options-box');
+            box.innerHTML = '';
+            document.getElementById('feedback').innerText = '';
+
+            data.o.forEach((option, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option';
+                btn.innerText = option;
+                btn.onclick = () => {
+                    const btns = document.querySelectorAll('.quiz-option');
+                    btns.forEach(b => b.style.pointerEvents = 'none');
+                    if(i === data.a) {
+                        btn.classList.add('correct');
+                        document.getElementById('feedback').innerText = data.m;
+                        confetti({ particleCount: 40, spread: 60, origin: { y: 0.8 } });
+                    } else {
+                        btn.style.background = "#e74c3c";
+                        document.getElementById('feedback').innerText = "Almost! But we know the truth. 😉";
+                    }
+                    setTimeout(() => {
+                        currentIdx++;
+                        if(currentIdx < questions.length) loadQuestion();
+                        else {
+                            document.getElementById('quiz-content').style.display = 'none';
+                            document.getElementById('gift-box-container').style.display = 'block';
+                        }
+                    }, 2000);
+                };
+                box.appendChild(btn);
+            });
+        }
+
+        // --- Final Surprise Logic with MUSIC FIX ---
+        function revealSurprise() {
+            const audio = document.getElementById('birthdayMusic');
+            
+            // Show content
+            document.getElementById('gift-box-container').style.display = 'none';
+            document.getElementById('final-surprise').style.display = 'block';
+            
+            // Play Music
+            if (audio) {
+                audio.volume = 0.6; // Set volume to 60%
+                audio.play().catch(error => {
+                    console.log("Audio play failed. Most browsers require a click to play sound.", error);
+                });
+            }
+
+            // Explosive Confetti Rain
+            var duration = 7 * 1000;
+            var end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 6, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff758c', '#ffd700'] });
+                confetti({ particleCount: 6, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#7000ff', '#ffd700'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+
+        // --- Init Scripts ---
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none';
+                    startTypewriter();
+                    loadQuestion();
+                }, 1000);
+            }, 2000);
+        });
+
+        window.addEventListener('scroll', () => {
+            document.querySelectorAll('.reveal').forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
